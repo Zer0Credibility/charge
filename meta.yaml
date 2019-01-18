@@ -1,9 +1,9 @@
 package:
   name: charge
-  version: 'a0.5_dev1'
+  version: 'a0.5_dev2'
 
 source:
-  git_rev: 'a0.5_dev1'
+  git_rev: 'a0.5_dev2'
   git_url: 'https://github.com/Zer0Credibility/charge'
 
 requirements:
