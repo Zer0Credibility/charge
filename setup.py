@@ -1,7 +1,8 @@
 from setuptools import setup
+from rebuild_tools import version
 
 setup(name='charge',
-      version='a0.5_dev2',
+      version=version(),
       description='Module for analysis of potentiostatic data',
       author='Clayton M. Rabideau',
       author_email='cmr57@cam.ac.uk',

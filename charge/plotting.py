@@ -105,8 +105,11 @@ class Plot(object):
         ax1.yaxis.grid(color='#F1F1F1')
         ax1.xaxis.grid(color='#F1F1F1')
 
-        plt.ylabel(u'Current (μA)', fontsize=14)
-        plt.xlabel('Time (Seconds)', fontsize=14)
+        # plt.ylabel(u'Current (μA)', fontsize=14)
+        # plt.xlabel('Time (Seconds)', fontsize=14)
+
+        plt.ylabel(u'Current (μA)')
+        plt.xlabel('Time (Seconds)')
 
         mean = self.statistics.mean()
         sd = self.statistics.std()
@@ -131,11 +134,16 @@ class Plot(object):
         ax1.yaxis.grid(color='#F1F1F1')
         ax1.xaxis.grid(color='#F1F1F1')
 
-        plt.ylabel(u'Current (μA)', fontsize=14)
-        plt.xlabel('Time (Seconds)', fontsize=14)
+        # ax1.set_ylabel(u'Current (μA)', fontsize=14)
+        # ax1.set_xlabel('Time (Seconds)', fontsize=14)
+
+        # plt.ylabel(u'Current (μA)', fontsize=14)
+        # plt.xlabel('Time (Seconds)', fontsize=14)
 
         if self.title is not None:
             plt.title(str(self.title) + ' \n')
+
+        plt.suptitle(str(self.title) + ' \n')
 
         mprops = dict(color='#3F5D7D')
 
@@ -153,11 +161,6 @@ class Plot(object):
                 s_color = line.get_color()
                 colors.append(s_color)
             else:
-                #print(data[o])
-                #print(data[o].shape)
-                #print(data[o][0].shape)
-                #print(data[o][0].size)
-                #exit()
                 if data[o][0].size is not 1:
                     line, = plt.plot(self.time, data[o][0])
                     for i in range(len(groups[o])):
@@ -175,30 +178,11 @@ class Plot(object):
 
         plt.cla()
 
-        # flat_colors = np.array([x if x is type(list) else list(x) for x in colors]).flatten()
-        # print(flat_colors)
-        # print(len(data))
-
-        # print(colors)
-        # print(groups)
-        # exit()
-
         for i in range(len(data)):
-
-            # print(data[i].ndim)
-            # print(colors)
-            # print(flat_colors)
-            # print(data[i].shape[0])
-            # print(data[i].shape)
-            # print(data[i].size)
-            # exit()
-
             if data[i].ndim > 1:
                 if data[i].shape[0] > 1:
                     for j in range(len(data[i])):
                         plt.plot(self.time, data[i][j], color=colors[i][j])
-                        # print(data[i][j])
-                        # print(colors[i][j])
                 elif data[i].shape[0] is 1:
                     plt.plot(self.time, np.array(data[i]).flatten(), color=colors[i])
                 else:
@@ -214,6 +198,10 @@ class Plot(object):
                 lab = [str(x[0]) + ' | ' + str(x[1]) for x in zip(self.g_names,
                                                                   list(chain.from_iterable(self.categories)))]
                 plt.legend(lab)
+
+        ax1.set_ylabel(u'Current (μA)')
+        ax1.set_xlabel('Time (Seconds)')
+
         plt.show()
 
     def replicates_mean(self, data):
@@ -222,9 +210,9 @@ class Plot(object):
         ax1.yaxis.grid(color='#F1F1F1')
         ax1.xaxis.grid(color='#F1F1F1')
 
-        plt.ylabel(u'Current (μA)', fontsize=14)
+        plt.ylabel(u'Current (μA)')
         # plt.ylabel('Charge (mC)', fontsize=14)
-        plt.xlabel('Time (Seconds)', fontsize=14)
+        plt.xlabel('Time (Seconds)')
 
         if self.title is not None:
             plt.title(str(self.title) + ' \n')

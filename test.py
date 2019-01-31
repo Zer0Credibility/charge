@@ -357,8 +357,8 @@ def test_series_std_acc(day):
 #
 # boxplot(aucs)
 
-# test_plot_means_alt()
-test_plot_greplicates_alt_data()
+test_plot_means_alt()
+# test_plot_greplicates_alt_data()
 
 # test_means_series(0)
 # test_acc_series(3)
