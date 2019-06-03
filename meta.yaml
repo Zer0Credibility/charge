@@ -1,6 +1,6 @@
 package:
   name: charge
-  version: 'a0.5_dev3'
+  version: 'a0.5_dev4'
 
 source:
   git_rev: 'master'

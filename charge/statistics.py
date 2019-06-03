@@ -4,6 +4,7 @@ import pandas as pd
 import re
 from tqdm import tqdm
 from .utils import load, group
+import multiprocessing
 from multiprocessing import Pool
 from scipy import stats
 from statsmodels.nonparametric.smoothers_lowess import lowess
@@ -41,14 +42,16 @@ class Statistics(object):
         return np.array([np.std(x, axis=0) for x in self.g_data])
 
     def smooth(self):
-        sm_data = np.zeros(self.data.shape)
-        for i in tqdm(range(len(self.data))):
-            sm_data[i] = lowess(self.data[i], self.time,
-                                frac=float(self.span),
-                                it=1,
-                                delta=0.0,
-                                is_sorted=True,
-                                return_sorted=False)
+
+        sm_data = self.imap_unordered_bar(self.lowess_ind, range(len(self.data)))
+
+        # for i in tqdm(range(len(self.data))):
+        #     sm_data[i] = lowess(self.data[i], self.time,
+        #                         frac=float(self.span),
+        #                         it=1,
+        #                         delta=0.0,
+        #                         is_sorted=True,
+        #                         return_sorted=False)
 
         return sm_data
 
@@ -69,4 +72,25 @@ class Statistics(object):
         t_stat, p_value = sp.stats.ttest_ind(group1, group2, equal_var=False, axis=0)
 
         return t_stat, p_value
+
+    def imap_unordered_bar(self, func, args, n_processes=multiprocessing.cpu_count()):
+        p = Pool(n_processes)
+
+        sm_data = np.zeros(self.data.shape)
+
+        with tqdm(total=len(args)) as pbar:
+            for i, res in tqdm(p.imap_unordered(func, args)):
+                pbar.update()
+                sm_data[i] = res
+        pbar.close()
+        p.close()
+        p.join()
+        return sm_data
+
+    def lowess_ind(self, i):
+
+        smooth = lowess(self.data[i], self.time, frac=float(self.span), it=1, delta=0.0,
+                        is_sorted=True, return_sorted=False)
+
+        return i, smooth
 

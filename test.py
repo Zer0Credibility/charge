@@ -1,8 +1,9 @@
 from charge import utils
 from charge.statistics import Statistics
-from charge.plotting import Plot, boxplot
+from charge.plotting import Plot, BoxPlot
 from charge import echem
 import numpy as np
+from matplotlib import rc
 
 
 # nc_nc = [0, 1, 2, 3]
@@ -29,6 +30,7 @@ def test_plot_greplicates():
 
     plots = Plot(data, groups, active_channels, categories=categories, title=p_title)
     plot = plots.g_replicates(g_data)
+
 
 def test_plot_greplicates_alt_data():
 
@@ -118,6 +120,43 @@ def test_plot_means_alt():
     print(plot)
 
 
+def test_plot_means_std():
+    file = '/Users/Clayton/Documents/Electrochemistry/Datasets/Dropbox/Clayton/2018-11-20/acetate+ur+glucose_vs_glucose.xlsx'
+
+    # nc_nc = []
+    pc_nc = [0, 1, 2, 3, 4, 5]
+    pc_pc = [6, 7, 8, 9, 10]
+
+    groups = [pc_nc, pc_pc]
+    categories = ['PC PC [Rhodo, +Glucose, +Acetate & Urea]', 'PC NC [Rhodo, +Acetate & Urea]']
+    p_title = 'Impact of Glucose & Acetate+Urea on Production of Charge'
+    data, active_channels = utils.load(file)
+    g_data, groups = utils.group(data, groups, active_channels)
+
+    # print(groups)
+    # print(active_channels)
+    # exit()
+    # exit()
+
+    stats = Statistics(data, groups, active_channels)
+    plots = Plot(data, groups, active_channels, categories=categories, title=p_title)
+
+    # mean = stats.mean()
+
+    # print(mean)
+    # exit()
+
+    # print(g_data[0])
+    # print(g_data[1])
+    # print(g_data[0].shape)
+    # print(g_data[1].shape)
+    # exit()
+
+    # plot = plots.replicates_mean(mean)
+    plots.g_mean_std(g_data)
+    # print(plot)
+
+
 def test_plot_replicates():
     file = './test_data/2018-10-07_from_Paolo_1.xlsx'
     p_title = 'Impact of Substrate Addition on Accumulated Charge, Day 1'
@@ -125,6 +164,7 @@ def test_plot_replicates():
     plots = Plot(data, groups=None, active_channels=active_channels, categories=None, title=p_title)
     plot = plots.replicates(data)
     print(plot)
+
 
 def test_echem_charge():
 
@@ -197,7 +237,6 @@ def test_plot_accumulated_charge():
 
     mean = stats.mean()
     mean = echem.charge_accumulation(mean)
-
     plot = plots.replicates_mean(mean)
     print(plot)
 
@@ -347,6 +386,27 @@ def test_series_std_acc(day):
     return aucs
 
 
+def test_boxplot_class_auc():
+
+    files = ['./test_data/Day1.xlsx',
+             './test_data/Day2.xlsx',
+             './test_data/Day3.xlsx']
+
+    nc_nc = [1]
+    pc_nc = [2, 3]
+    pc_pc = [4, 5, 6, 7]
+
+    groups = [nc_nc, pc_nc, pc_pc]
+    categories = ['NC NC [No Cells, No Substrate]', 'PC NC [Rhodo, No Substrate]', 'PC PC [Rhodo, Add. Substrate]']
+    p_title = 'Impact of Substrate Addition on Current Difference'
+
+    plot = BoxPlot(files, p_title, groups, categories)
+
+    plot.auc_boxplot()
+
+
+# test_boxplot_class_auc()
+
 # alternat_data()
 # exit()
 
@@ -354,13 +414,14 @@ def test_series_std_acc(day):
 # aucs = []
 # for i in [0, 1, 2, 3]:
 #     aucs.append(test_series_std_acc(i))
-#
 # boxplot(aucs)
 
-test_plot_means_alt()
+
+# test_plot_means_std()
+# test_plot_means_alt()
 # test_plot_greplicates_alt_data()
 
-# test_means_series(0)
+test_means_series(0)
 # test_acc_series(3)
 
 # test_plot_accumulated_charge()
